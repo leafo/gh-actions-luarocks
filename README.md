@@ -1,23 +1,27 @@
-# leafo/gh-actions-lua/install-lua
+# Github Action for LuaRocks
 
-[![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
+### `leafo/gh-actions-luarocks`
 
+[![Actions Status](https://github.com/leafo/gh-actions-luarocks/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-luarocks/actions)
 
-Builds and intsalls LuaRocks from source into `.luarocks/` directory in the working directory. Configures `PATH`, `LUA_PATH`, and `LUA_CPATH` environment varibles to be able to use luarocks directly in workflows.
+Builds and installs LuaRocks from source into the `.luarocks/` directory in the working directory. Configures `PATH`, `LUA_PATH`, and `LUA_CPATH` environment variables to be able to use the `luarocks` command directly in workflows.
 
-Depends on [`leafo/gh-actions-lua/install-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua) for a version of Lua.
-
-
-For full example, see https://github.com/leafo/gh-actions-lua/blob/master/README.md
+[`leafo/gh-actions-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua) can be used to install Lua, which is required for LuaRocks to build and run. (This action will use any Lua installed in `.lua/`).
 
 ## Usage
 
-Install Lua, then LuaRocks:
+Installs Lua, LuaRocks, then install a module:
 
 ```yaml
-- uses: leafo/gh-actions-lua/install-lua@master
-- uses: leafo/gh-actions-lua/install-luarocks@master
+- uses: leafo/gh-actions-lua@master
+- uses: leafo/gh-actions-luarocks@master
+
+# Install some package
+- name: install a module
+  run: luarocks install moonscript
 ```
+
+For a more complete exmpale see: https://github.com/leafo/gh-actions-lua/blob/master/README.md#full-example
 
 ## Inputs
 
@@ -26,3 +30,11 @@ Install Lua, then LuaRocks:
 **Default**: `"3.2.0"`
 
 Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
+
+Example:
+
+```yaml
+- uses: leafo/gh-actions-luarocks@master
+  with:
+    luarocksVersion: "3.1.3"
+```
