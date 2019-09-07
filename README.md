@@ -1,76 +1,28 @@
-# Github Actions for Lua
+# leafo/gh-actions-lua/install-lua
 
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
 
-These are a collection of GitHub actions for working with Lua and LuaRocks for CI/CD.
+Builds and intsalls LuaRocks from source into `.luarocks/` directory in the working directory. Configures `PATH`, `LUA_PATH`, and `LUA_CPATH` environment varibles to be able to use luarocks directly in workflows.
 
-* [`leafo/gh-actions-lua/install-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua)
-  * inputs: `luaVersion`
-* [`leafo/gh-actions-lua/install-luarocks`](https://github.com/leafo/gh-actions-lua/tree/master/install-luarocks)
-  * inputs: `luarocksVersion`
+Depends on [`leafo/gh-actions-lua/install-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua) for a version of Lua.
 
-## Example
 
-This example is for running tests on a Lua module that uses LuaRocks for
-dependencies and [busted](https://olivinelabs.com/busted/) for a test suite.
+For full example, see https://github.com/leafo/gh-actions-lua/blob/master/README.md
 
-Create `.github/workflows/test.yml` in your repository:
+## Usage
+
+Install Lua, then LuaRocks:
 
 ```yaml
-name: test
-
-on: [push]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@master
-
-    - uses: leafo/gh-actions-lua/install-lua@master
-      with:
-        luaVersion: "5.1.5"
-
-    - uses: leafo/gh-actions-lua/install-luarocks@master
-
-    - name: build
-      run: |
-        luarocks install busted
-        luarocks make
-
-    - name: test
-      run: |
-        busted -o utfTerminal
+- uses: leafo/gh-actions-lua/install-lua@master
+- uses: leafo/gh-actions-lua/install-luarocks@master
 ```
 
-This example:
+## Inputs
 
-* Uses Lua 5.1.5 — You can use another version by chaning the `luaVersion` varible. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
-* Uses a `.rockspec` file the root directory of your repository to install dependencies and test packaging the module via `luarocks make`
+### `luarocksVersion`
 
+**Default**: `"3.2.0"`
 
-View the documentation for the individual actions (linked above) to learn more about how they work.
-
-### Version build matrix
-
-You can test against multiple versions of Lua using a matrix strategy:
-
-```yaml
-jobs:
-  test:
-    strategy:
-      matrix:
-        luaVersion: ["5.1.5", "5.2.4", "luajit-2.1.0-beta3"]
-
-    steps:
-    - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua/install-lua@master
-      with:
-        luaVersion: ${{ matrix.luaVersion }}
-
-    # ...
-```
-
-
+Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
