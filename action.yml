@@ -1,6 +1,6 @@
 
 name: "Install LuaRocks"
-description: "Download, build, and install LuaRocks to the .luarocks directory in the working directory"
+description: "Download, build, and install LuaRocks for use with scripts, tests, and more"
 
 branding:
   icon: 'moon'
