@@ -13,7 +13,7 @@ Builds and installs LuaRocks from source into the `.luarocks/` directory in the 
 Installs Lua, LuaRocks, then install a module:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v2
+- uses: leafo/gh-actions-lua@v5
 - uses: leafo/gh-actions-luarocks@v2
 
 # Install some package
