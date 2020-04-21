@@ -21,7 +21,7 @@ Installs Lua, LuaRocks, then install a module:
   run: luarocks install moonscript
 ```
 
-For a more complete exmpale see: https://github.com/leafo/gh-actions-lua/blob/master/README.md#full-example
+For a more complete example see: https://github.com/leafo/gh-actions-lua/blob/master/README.md#full-example
 
 ## Inputs
 
