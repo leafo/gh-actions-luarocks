@@ -6,7 +6,7 @@
 
 Builds and installs LuaRocks from source into the `.luarocks/` directory in the working directory. Configures `PATH`, `LUA_PATH`, and `LUA_CPATH` environment variables to be able to use the `luarocks` command directly in workflows, and require installed modules in Lua.
 
-[`leafo/gh-actions-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua) can be used to install Lua, which is required for LuaRocks to build and run. (This action will use any Lua installed in `.lua/`).
+[`leafo/gh-actions-lua`](https://github.com/marketplace/actions/install-lua-luajit) can be used to install Lua, which is required for LuaRocks to build and run. (This action will use any Lua installed in `.lua/`).
 
 ## Usage
 
