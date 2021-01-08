@@ -10,7 +10,7 @@ inputs:
   luaRocksVersion:
     description: "The version of LuaRocks to install, must be available on https://luarocks.github.io/luarocks/releases/"
     required: false
-    default: "3.3.1"
+    default: "3.5.0"
 
 runs:
   using: 'node12'
