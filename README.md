@@ -27,7 +27,7 @@ For a more complete example see: https://github.com/leafo/gh-actions-lua/blob/ma
 
 ### `luarocksVersion`
 
-**Default**: `"3.5.0"`
+**Default**: `"3.8.0"`
 
 Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
 
