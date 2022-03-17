@@ -27,14 +27,24 @@ async function main() {
   const luaRocksVersion = core.getInput('luaRocksVersion', { required: true })
 
   const luaRocksExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `luarocks-${luaRocksVersion}`)
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
   const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
 
   const sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
   await io.mkdirP(luaRocksExtractPath)
   await tc.extractTar(sourceTar, INSTALL_PREFIX)
 
-  await exec.exec(`./configure --with-lua-bin="${luaInstallPath}/bin" --prefix="${luaRocksInstallPath}"`, undefined, {
+  const configureArgs = []
+  if (core.getInput("withLuaPath")) {
+    configureArgs.push(`--with-lua="${core.getInput("withLuaPath")}"`)
+  } else {
+    // NOTE: this is the default install path provided by gh-actions-lua
+    const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+    configureArgs.push(`--with-lua-bin="${luaInstallPath}/bin"`)
+  }
+
+  configureArgs.push(`--prefix="${luaRocksInstallPath}"`)
+
+  await exec.exec(`./configure`, configureArgs, {
     cwd: luaRocksExtractPath
   })
 
