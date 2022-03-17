@@ -13,7 +13,7 @@ Builds and installs LuaRocks from source into the `.luarocks/` directory in the 
 Installs Lua, LuaRocks, then install a module:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v8
+- uses: leafo/gh-actions-lua@v9
 - uses: leafo/gh-actions-luarocks@v4
 
 # Install some package
@@ -34,7 +34,23 @@ Specifies which version of LuaRocks to install. Must be listed on https://luaroc
 Example:
 
 ```yaml
-- uses: leafo/gh-actions-luarocks@v3
+- uses: leafo/gh-actions-luarocks@v4
   with:
     luarocksVersion: "3.1.3"
+```
+
+### `withLuaPath`
+
+**Default**: `null` (Optional)
+
+Manually specify the path to an existing Lua installation to use. This is not
+necessary if you are using `leafo/gh-actions-lua`. Will build LuaRocks with
+`./configure --with-lua=$withLuaPath`
+
+Example:
+
+```yaml
+- uses: leafo/gh-actions-luarocks@v4
+  with:
+    withLuaPath: "/usr/local/openresty/luajit/"
 ```
