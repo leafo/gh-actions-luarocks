@@ -39,12 +39,12 @@ async function main() {
   } else {
     // NOTE: this is the default install path provided by gh-actions-lua
     const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
-    configureArgs.push(`--with-lua-bin=${luaInstallPath}/bin`)
+    configureArgs.push(`--with-lua-bin="${luaInstallPath}/bin"`)
   }
 
-  configureArgs.push(`--prefix=${luaRocksInstallPath}`)
+  configureArgs.push(`--prefix="${luaRocksInstallPath}"`)
 
-  await exec.exec(`./configure`, configureArgs, {
+  await exec.exec(`./configure ${configureArgs.join(" ")}`, undefined, {
     cwd: luaRocksExtractPath
   })
 
