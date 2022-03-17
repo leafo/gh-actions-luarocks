@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-openresty@master
+    - uses: leafo/gh-actions-openresty@main
     - uses: leafo/gh-actions-luarocks@master
       with:
         withLuaPath: "/usr/local/openresty/luajit/"
