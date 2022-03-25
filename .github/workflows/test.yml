@@ -31,6 +31,26 @@ jobs:
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
+  test-luarocks-2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: leafo/gh-actions-lua@master
+      with:
+        luaVersion: "5.2"
+
+    - uses: leafo/gh-actions-luarocks@master
+      with:
+        luaRocksVersion: "2.4.4"
+
+    - name: test luarocks
+      run: |
+        luarocks --version
+        luarocks path
+        luarocks install moonscript
+        lua -e 'require("moon").p({1,2,3})'
+
   test-macos:
     runs-on: macos-latest
 

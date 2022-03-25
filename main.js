@@ -39,7 +39,7 @@ async function main() {
   } else {
     // NOTE: this is the default install path provided by gh-actions-lua
     const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
-    configureArgs.push(`--with-lua-bin="${luaInstallPath}/bin"`)
+    configureArgs.push(`--with-lua="${luaInstallPath}"`)
   }
 
   configureArgs.push(`--prefix="${luaRocksInstallPath}"`)
@@ -52,6 +52,13 @@ async function main() {
     cwd: luaRocksExtractPath
   })
 
+  // NOTE: make build step is only necessary for luarocks 2.x
+  if (luaRocksVersion.match(/^2\./)) {
+    await exec.exec("make build", undefined, {
+      cwd: luaRocksExtractPath
+    })
+  }
+
   await exec.exec("make install", undefined, {
     cwd: luaRocksExtractPath
   })
@@ -59,8 +66,7 @@ async function main() {
   // Update environment to use luarocks directly
   let lrPath = ""
 
-  await exec.exec("./luarocks path --lr-bin", undefined, {
-    cwd: path.join(luaRocksInstallPath, "bin"),
+  await exec.exec(`${path.join(luaRocksInstallPath, "bin", "luarocks")} path --lr-bin`, undefined, {
     listeners: {
       stdout: (data) => {
         lrPath += data.toString()
