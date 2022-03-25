@@ -31,6 +31,22 @@ jobs:
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
+  test-macos:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: leafo/gh-actions-lua@master
+    - uses: leafo/gh-actions-luarocks@master
+
+    - name: test luarocks
+      run: |
+        echo $PATH
+        env | grep LUA
+        luarocks
+        luarocks path
+        luarocks install moonscript
+        lua -e 'require("moon").p({1,2,3})'
 
   test-openresty:
     runs-on: ubuntu-latest
