@@ -6,32 +6,20 @@ const tc = require("@actions/tool-cache")
 
 const path = require("path")
 
-const INSTALL_PREFIX = ".install"
+const BUILD_PREFIX = ".build-luarocks"
 
-const LUA_PREFIX = ".lua"
-const LUAROCKS_PREFIX = ".luarocks"
-
-// mkdir -p .install
-// LUA_INSTALL_DIR="$(pwd)/.lua"
-// LUAROCKS_INSTALL_DIR="$(pwd)/.luarocks"
-// mkdir -p "$LUAROCKS_INSTALL_DIR"
-// cd .install
-// curl -L https://luarocks.org/releases/luarocks-${{ matrix.luarocks_version }}.tar.gz | tar xz
-// cd luarocks-${{ matrix.luarocks_version }}
-// ./configure --with-lua-bin="${LUA_INSTALL_DIR}/bin" --prefix="$LUAROCKS_INSTALL_DIR"
-// # make bootstrap # this will work on luarocks >= 3.2.1
-// make
-// make install
+const LUA_PREFIX = ".lua" // default location for existing Lua installation
+const LUAROCKS_PREFIX = ".luarocks" // default location for LuaRocks installation
 
 async function main() {
   const luaRocksVersion = core.getInput('luaRocksVersion', { required: true })
 
-  const luaRocksExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `luarocks-${luaRocksVersion}`)
+  const luaRocksExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `luarocks-${luaRocksVersion}`)
   const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
 
   const sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
   await io.mkdirP(luaRocksExtractPath)
-  await tc.extractTar(sourceTar, INSTALL_PREFIX)
+  await tc.extractTar(sourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
   const configureArgs = []
   if (core.getInput("withLuaPath")) {
