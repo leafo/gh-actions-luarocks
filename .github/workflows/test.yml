@@ -68,6 +68,32 @@ jobs:
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
+  test-windows:
+    strategy:
+      matrix:
+        luaVersion: ["5.1", "5.4", "luajit-2.1.0-beta3"]
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: ilammy/msvc-dev-cmd@v1
+      if: ${{ matrix.luaVersion != 'luajit-2.1.0-beta3' }}
+    - uses: leafo/gh-actions-lua@master
+      with:
+        luaVersion: ${{ matrix.luaVersion }}
+    - uses: hishamhm/gh-actions-luarocks@master
+
+    - name: test luarocks
+      shell: cmd
+      run: |
+        echo %PATH%
+        set | find "LUA"
+        luarocks
+        luarocks path
+        luarocks install moonscript
+        lua -e "require('moon').p({1,2,3})"
+
   test-openresty:
     runs-on: ubuntu-latest
 
