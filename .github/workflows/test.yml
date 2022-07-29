@@ -27,7 +27,7 @@ jobs:
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
@@ -64,7 +64,7 @@ jobs:
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
@@ -90,7 +90,7 @@ jobs:
         echo %PATH%
         set | find "LUA"
         luarocks
-        luarocks path
+        luarocks config
         luarocks install moonscript
         lua -e "require('moon').p({1,2,3})"
 
@@ -109,5 +109,5 @@ jobs:
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install pgmoon
