@@ -121,7 +121,7 @@ const result = await core.group('Do something async', async () => {
 
 This library has 3 methods that will produce [annotations](https://docs.github.com/en/rest/reference/checks#create-a-check-run). 
 ```js
-core.error('This is a bad error. This will also fail the build.')
+core.error('This is a bad error, action may still succeed though.')
 
 core.warning('Something went wrong, but it\'s not bad enough to fail the build.')
 
@@ -163,7 +163,7 @@ export interface AnnotationProperties {
   startColumn?: number
 
   /**
-   * The start column for the annotation. Cannot be sent when `startLine` and `endLine` are different values.
+   * The end column for the annotation. Cannot be sent when `startLine` and `endLine` are different values.
    * Defaults to `startColumn` when `startColumn` is provided.
    */
   endColumn?: number
@@ -309,4 +309,27 @@ outputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
+```
+
+#### Filesystem path helpers
+
+You can use these methods to manipulate file paths across operating systems.
+
+The `toPosixPath` function converts input paths to Posix-style (Linux) paths.
+The `toWin32Path` function converts input paths to Windows-style paths. These
+functions work independently of the underlying runner operating system.
+
+```js
+toPosixPath('\\foo\\bar') // => /foo/bar
+toWin32Path('/foo/bar') // => \foo\bar
+```
+
+The `toPlatformPath` function converts input paths to the expected value on the runner's operating system.
+
+```js
+// On a Windows runner.
+toPlatformPath('/foo/bar') // => \foo\bar
+
+// On a Linux runner.
+toPlatformPath('\\foo\\bar') // => /foo/bar
 ```
