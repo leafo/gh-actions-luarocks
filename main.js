@@ -41,7 +41,7 @@ async function installWindows(luaRocksVersion, tempBuildPath, luaRocksInstallPat
 
   await exec.exec(`luarocks config LUA_LIBDIR ${luaPath}/lib`, undefined, {})
 
-  if (semver.lt(luarocksVersion, "3.9.2") && !process.env["VCINSTALLDIR"]) {
+  if (semver.lt(luaRocksVersion, "3.9.2") && !process.env["VCINSTALLDIR"]) {
     await exec.exec(`luarocks config variables.CC "x86_64-w64-mingw32-gcc"`, undefined, {})
     await exec.exec(`luarocks config variables.LD "x86_64-w64-mingw32-gcc"`, undefined, {})
   }
