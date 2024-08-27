@@ -38,6 +38,8 @@ async function installWindows(luaRocksVersion, tempBuildPath, luaRocksInstallPat
 
   await exec.exec(`luarocks config lua_version ${luaVersion}`, undefined, {})
 
+  await exec.exec(`luarocks config LUA_LIBDIR ${luaPath}/lib`, undefined, {})
+
   /* fix for mingw without msvc; won't be needed from LuaRocks 3.9.2 onwards */
   if (!process.env["VCINSTALLDIR"]) {
     await exec.exec(`luarocks config variables.CC "x86_64-w64-mingw32-gcc"`, undefined, {})
