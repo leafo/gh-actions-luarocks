@@ -40,7 +40,7 @@ jobs:
       with:
         luaVersion: "5.2"
 
-    - uses: hishamhm/gh-actions-luarocks@master
+    - uses: ./
       with:
         luaRocksVersion: "2.4.4"
 
@@ -57,7 +57,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: hishamhm/gh-actions-lua@master
-    - uses: hishamhm/gh-actions-luarocks@master
+    - uses: ./
 
     - name: test luarocks
       run: |
@@ -82,7 +82,7 @@ jobs:
     - uses: hishamhm/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
-    - uses: hishamhm/gh-actions-luarocks@master
+    - uses: ./
 
     - name: test luarocks
       shell: cmd
@@ -100,7 +100,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: leafo/gh-actions-openresty@main
-    - uses: hishamhm/gh-actions-luarocks@master
+    - uses: ./
       with:
         withLuaPath: "/usr/local/openresty/luajit/"
 
