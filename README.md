@@ -25,9 +25,9 @@ For a more complete example see: https://github.com/leafo/gh-actions-lua/blob/ma
 
 ## Inputs
 
-### `luarocksVersion`
+### `luaRocksVersion`
 
-**Default**: `"3.8.0"`
+**Default**: `"3.11.1"`
 
 Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
 
@@ -36,7 +36,7 @@ Example:
 ```yaml
 - uses: leafo/gh-actions-luarocks@v4
   with:
-    luarocksVersion: "3.1.3"
+    luaRocksVersion: "3.1.3"
 ```
 
 ### `withLuaPath`
