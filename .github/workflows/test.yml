@@ -7,17 +7,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        luaVersion: ["5.1.5", "5.2.4", "5.3.5", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
+        luaVersion: ["5.1.5", "5.2.4", "5.3.5", "luajit", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@master
+    - uses: hishamhm/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: hishamhm/gh-actions-luarocks@master
 
     - name: test lua
       run: lua -e 'print("hi from lua")'
@@ -27,7 +27,7 @@ jobs:
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
 
@@ -36,11 +36,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@master
+    - uses: hishamhm/gh-actions-lua@master
       with:
         luaVersion: "5.2"
 
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
       with:
         luaRocksVersion: "2.4.4"
 
@@ -56,17 +56,43 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@master
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: hishamhm/gh-actions-lua@master
+    - uses: ./
 
     - name: test luarocks
       run: |
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install moonscript
         lua -e 'require("moon").p({1,2,3})'
+
+  test-windows:
+    strategy:
+      matrix:
+        luaVersion: ["5.1", "5.4", "luajit" ]
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: ilammy/msvc-dev-cmd@v1
+      if: ${{ ! contains(matrix.luaVersion, 'luajit') }}
+    - uses: hishamhm/gh-actions-lua@master
+      with:
+        luaVersion: ${{ matrix.luaVersion }}
+    - uses: ./
+
+    - name: test luarocks
+      shell: cmd
+      run: |
+        echo %PATH%
+        set | find "LUA"
+        luarocks
+        luarocks config
+        luarocks install moonscript
+        lua -e "require('moon').p({1,2,3})"
 
   test-openresty:
     runs-on: ubuntu-latest
@@ -74,7 +100,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: leafo/gh-actions-openresty@main
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
       with:
         withLuaPath: "/usr/local/openresty/luajit/"
 
@@ -83,5 +109,5 @@ jobs:
         echo $PATH
         env | grep LUA
         luarocks
-        luarocks path
+        luarocks config
         luarocks install pgmoon
