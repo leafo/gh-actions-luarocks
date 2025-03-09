@@ -12,6 +12,7 @@ const BUILD_PREFIX = ".build-luarocks"
 
 const LUA_PREFIX = ".lua" // default location for existing Lua installation
 const LUAROCKS_PREFIX = ".luarocks" // default location for LuaRocks installation
+const PE_PARSER_VERSION = "0.6" // version of https://github.com/Tieske/pe-parser
 
 const isWindows = () => (process.platform || "").startsWith("win32")
 
@@ -21,6 +22,7 @@ async function installWindows(luaRocksVersion, tempBuildPath, luaRocksInstallPat
 
   const srcDir = path.join(tempBuildPath, `luarocks-${luaRocksVersion}-windows-64`)
   const dstDir = path.join(luaRocksInstallPath, "bin")
+  const luaExe = path.join(luaPath, "bin", "lua.exe")
 
   await io.mkdirP(dstDir)
 
@@ -41,9 +43,35 @@ async function installWindows(luaRocksVersion, tempBuildPath, luaRocksInstallPat
 
   await exec.exec(`luarocks config LUA_LIBDIR ${luaPath}/lib`, undefined, {})
 
-  if (semver.lt(luaRocksVersion, "3.9.2") && !process.env["VCINSTALLDIR"]) {
-    await exec.exec(`luarocks config variables.CC "x86_64-w64-mingw32-gcc"`, undefined, {})
-    await exec.exec(`luarocks config variables.LD "x86_64-w64-mingw32-gcc"`, undefined, {})
+  if (!process.env["VCINSTALLDIR"]) {
+    if (semver.lt(luaRocksVersion, "3.9.2")) {
+      await exec.exec(`luarocks config variables.CC "x86_64-w64-mingw32-gcc"`, undefined, {})
+      await exec.exec(`luarocks config variables.LD "x86_64-w64-mingw32-gcc"`, undefined, {})
+    }
+
+    const peParserTarball = await tc.downloadTool(`https://github.com/Tieske/pe-parser/archive/refs/tags/version_${PE_PARSER_VERSION}.tar.gz`)
+    await tc.extractTar(peParserTarball, tempBuildPath)
+    
+    const peParser = path.join(tempBuildPath, `pe-parser-version_${PE_PARSER_VERSION}`, "src", "pe-parser.lua")
+  
+    let msvcrt = ""
+    await exec.exec(`lua -e "local pe = assert(loadfile([[${peParser}]]))(); local rt, _ = pe.msvcrt([[${luaExe}]]); print(rt or 'nil')"`, undefined, {
+      listeners: {
+        stdout: (data) => {
+          msvcrt += data.toString()
+          if (msvcrt === "nil") {
+            msvcrt = ""
+          }
+          else if (msvcrt === "MSVCRT") {
+            msvcrt = "m"
+          }
+        }
+      }
+    })
+  
+    if (msvcrt != "") {
+      await exec.exec(`luarocks config variables.MSVCRT "${msvcrt}"`, undefined, {})
+    }
   }
 }
 
