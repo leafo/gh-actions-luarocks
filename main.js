@@ -12,18 +12,21 @@ const LUA_PREFIX = ".lua" // default location for existing Lua installation
 const LUAROCKS_PREFIX = ".luarocks" // default location for LuaRocks installation
 
 async function main() {
-  const luaRocksVersion = core.getInput('luaRocksVersion', { required: true })
-
-  const luaRocksExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `luarocks-${luaRocksVersion}`)
-  const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
+  let luaRocksVersion = core.getInput('luaRocksVersion', { required: true })
 
   let sourceTar
   if (luaRocksVersion.startsWith("@")) {
-    // download the specified github commit
-    sourceTar = await tc.downloadTool(`https://github.com/luarocks/luarocks/archive/${luaRocksVersion.substring(1)}.tar.gz`)
+    luaRocksVersion = luaRocksVersion.substring(1) // remove the '@' prefix
+    if (!luaRocksVersion) {
+      luaRocksVersion = "master" // default to master branch if no version is specified
+    }
+    sourceTar = await tc.downloadTool(`https://github.com/luarocks/luarocks/archive/${luaRocksVersion}.tar.gz`)
   } else {
     sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
   }
+
+  const luaRocksExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `luarocks-${luaRocksVersion}`)
+  const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
 
   await io.mkdirP(luaRocksExtractPath)
   await tc.extractTar(sourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
