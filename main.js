@@ -76,7 +76,17 @@ async function installWindows(luaRocksVersion, tempBuildPath, luaRocksInstallPat
 }
 
 async function installUnix(luaRocksVersion, tempBuildPath, luaRocksInstallPath, luaPath) {
-  const sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
+  let sourceTar
+  if (luaRocksVersion.startsWith("@")) {
+    luaRocksVersion = luaRocksVersion.substring(1) // remove the '@' prefix
+    if (!luaRocksVersion) {
+      luaRocksVersion = "master" // default to master branch if no version is specified
+    }
+    sourceTar = await tc.downloadTool(`https://github.com/luarocks/luarocks/archive/${luaRocksVersion}.tar.gz`)
+  } else {
+    sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
+  }
+
   await tc.extractTar(sourceTar, path.join(tempBuildPath))
 
   const luaRocksExtractPath = path.join(tempBuildPath, `luarocks-${luaRocksVersion}`)
