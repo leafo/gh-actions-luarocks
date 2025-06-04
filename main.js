@@ -17,7 +17,14 @@ async function main() {
   const luaRocksExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `luarocks-${luaRocksVersion}`)
   const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
 
-  const sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
+  let sourceTar
+  if (luaRocksVersion.startsWith("@")) {
+    // download the specified github commit
+    sourceTar = await tc.downloadTool(`https://github.com/luarocks/luarocks/archive/${luaRocksVersion.substring(1)}.tar.gz`)
+  } else {
+    sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
+  }
+
   await io.mkdirP(luaRocksExtractPath)
   await tc.extractTar(sourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
