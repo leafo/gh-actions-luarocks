@@ -13,11 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: hishamhm/gh-actions-lua@master
+    - uses: luarocks/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - uses: hishamhm/gh-actions-luarocks@master
+    - uses: luarocks/gh-actions-luarocks@master
 
     - name: test lua
       run: lua -e 'print("hi from lua")'
@@ -36,7 +36,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: hishamhm/gh-actions-lua@master
+    - uses: luarocks/gh-actions-lua@master
       with:
         luaVersion: "5.2"
 
@@ -56,7 +56,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: hishamhm/gh-actions-lua@master
+    - uses: luarocks/gh-actions-lua@master
     - uses: ./
 
     - name: test luarocks
@@ -79,7 +79,7 @@ jobs:
     - uses: actions/checkout@master
     - uses: ilammy/msvc-dev-cmd@v1
       if: ${{ ! contains(matrix.luaVersion, 'luajit') }}
-    - uses: hishamhm/gh-actions-lua@master
+    - uses: luarocks/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
     - uses: ./
