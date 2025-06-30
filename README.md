@@ -13,8 +13,8 @@ Builds and installs LuaRocks from source into the `.luarocks/` directory in the 
 Installs Lua, LuaRocks, then install a module:
 
 ```yaml
-- uses: luarocks/gh-actions-lua@v10
-- uses: luarocks/gh-actions-luarocks@v5
+- uses: luarocks/gh-actions-lua@v11
+- uses: luarocks/gh-actions-luarocks@v6
 
 # Install some package
 - name: install a module
@@ -27,14 +27,14 @@ For a more complete example see: https://github.com/luarocks/gh-actions-lua/blob
 
 ### `luaRocksVersion`
 
-**Default**: `"3.11.1"`
+**Default**: `"3.12.2"`
 
 Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
 
 Example:
 
 ```yaml
-- uses: luarocks/gh-actions-luarocks@v5
+- uses: luarocks/gh-actions-luarocks@v6
   with:
     luaRocksVersion: "3.1.3"
 ```
@@ -50,7 +50,7 @@ necessary if you are using `luarocks/gh-actions-lua`. Will build LuaRocks with
 Example:
 
 ```yaml
-- uses: luarocks/gh-actions-luarocks@v5
+- uses: luarocks/gh-actions-luarocks@v6
   with:
     withLuaPath: "/usr/local/openresty/luajit/"
 ```

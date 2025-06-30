@@ -10,7 +10,7 @@ inputs:
   luaRocksVersion:
     description: "The version of LuaRocks to install, must be available on https://luarocks.github.io/luarocks/releases/"
     required: false
-    default: "3.12.1"
+    default: "3.12.2"
   withLuaPath:
     description: "Directly specify existing version of Lua to use (as ./configure --with-lua)"
     required: false
