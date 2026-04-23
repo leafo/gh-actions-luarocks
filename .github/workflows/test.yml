@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v6
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v6
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: "5.2"
@@ -55,7 +55,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v6
     - uses: leafo/gh-actions-lua@master
     - uses: leafo/gh-actions-luarocks@master
 
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v6
     - uses: leafo/gh-actions-openresty@main
     - uses: leafo/gh-actions-luarocks@master
       with:

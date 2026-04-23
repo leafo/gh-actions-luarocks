@@ -1,10 +1,10 @@
 
-const core = require("@actions/core")
-const exec = require("@actions/exec")
-const io = require("@actions/io")
-const tc = require("@actions/tool-cache")
+import * as core from "@actions/core"
+import * as exec from "@actions/exec"
+import * as io from "@actions/io"
+import * as tc from "@actions/tool-cache"
 
-const path = require("path")
+import path from "path"
 
 const BUILD_PREFIX = ".build-luarocks"
 
