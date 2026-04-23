@@ -57,6 +57,8 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - uses: leafo/gh-actions-lua@master
+      with:
+        luaVersion: "5.4"
     - uses: leafo/gh-actions-luarocks@master
 
     - name: test luarocks
