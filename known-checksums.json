@@ -1,0 +1,13 @@
+{
+  "_comment": "SHA256 checksums of luarocks-<version>.tar.gz from https://luarocks.org/releases/. Used by main.js to verify the source tarball after download. To add a new version: download the tarball, run `sha256sum luarocks-X.Y.Z.tar.gz`, and add an entry below.",
+  "tarballSha256": {
+    "3.13.0": "245bf6ec560c042cb8948e3d661189292587c5949104677f1eecddc54dbe7e37",
+    "3.12.2": "b0e0c85205841ddd7be485f53d6125766d18a81d226588d2366931e9a1484492",
+    "3.12.1": "f56b85a2a7a481f0321845807b79a05237860b04e4a9d186da632770029b3290",
+    "3.12.0": "3d4c8acddf9b975e77da68cbf748d5baf483d0b6e9d703a844882db25dd61cdf",
+    "3.11.1": "c3fb3d960dffb2b2fe9de7e3cb004dc4d0b34bb3d342578af84f84325c669102",
+    "3.11.0": "25f56b3c7272fb35b869049371d649a1bbe668a56d24df0a66e3712e35dd44a6",
+    "3.10.0": "e9bf06d5ec6b8ecc6dbd1530d2d77bdb3377d814a197c46388e9f148548c1c89",
+    "3.9.2":  "bca6e4ecc02c203e070acdb5f586045d45c078896f6236eb46aa33ccd9b94edb"
+  }
+}
