@@ -1,23 +1,40 @@
 name: test
 
-on: [push, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - run: npm ci --omit=dev
+    - run: git diff --exit-code -- package-lock.json node_modules
+    - run: npm test
+    - run: npm audit --omit=dev
+
   test:
     strategy:
       fail-fast: false
       matrix:
-        luaVersion: ["5.1.5", "5.2.4", "5.3.5", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
+        luaVersion: ["5.1.5", "5.2.4", "5.3.6", "5.5", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
 
     - name: test lua
       run: lua -e 'print("hi from lua")'
@@ -35,12 +52,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: "5.2"
 
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
       with:
         luaRocksVersion: "2.4.4"
 
@@ -55,11 +74,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: "5.4"
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
 
     - name: test luarocks
       run: |
@@ -74,9 +95,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - uses: leafo/gh-actions-openresty@main
-    - uses: leafo/gh-actions-luarocks@master
+    - uses: ./
       with:
         withLuaPath: "/usr/local/openresty/luajit/"
 

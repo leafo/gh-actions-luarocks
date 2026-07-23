@@ -1,11 +1,15 @@
 {
-  "name": "install-lua",
+  "name": "gh-actions-luarocks",
   "version": "1.0.0",
-  "description": "Build and install Lua",
+  "description": "Build and install LuaRocks",
+  "private": true,
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --check main.js"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "author": "leaf corcoran <leafot@gmail.com>",
   "license": "MIT",
