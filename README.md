@@ -29,14 +29,14 @@ For a more complete example see: https://github.com/leafo/gh-actions-lua/blob/ma
 
 **Default**: `"3.13.0"`
 
-Specifies which version of LuaRocks to install. Must be listed on https://luarocks.github.io/luarocks/releases/
+Specifies which version of LuaRocks to install. Must be listed in [`known-checksums.json`](./known-checksums.json) — the action verifies the downloaded source tarball against the SHA256 recorded there before building. To request a new version, open a PR adding the `sha256sum` of `luarocks-<version>.tar.gz` to that file.
 
 Example:
 
 ```yaml
 - uses: leafo/gh-actions-luarocks@v6
   with:
-    luaRocksVersion: "3.1.3"
+    luaRocksVersion: "3.13.0"
 ```
 
 ### `withLuaPath`

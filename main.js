@@ -4,12 +4,58 @@ import * as exec from "@actions/exec"
 import * as io from "@actions/io"
 import * as tc from "@actions/tool-cache"
 
+import crypto from "crypto"
+import fs from "fs"
 import path from "path"
+import { fileURLToPath } from "url"
 
 const BUILD_PREFIX = ".build-luarocks"
 
 const LUA_PREFIX = ".lua" // default location for existing Lua installation
 const LUAROCKS_PREFIX = ".luarocks" // default location for LuaRocks installation
+
+// Resolve sibling files (known-checksums.json) relative to this script rather
+// than process.cwd(), since the action runs from the consumer's repo root.
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+function loadKnownChecksums() {
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, "known-checksums.json"), "utf8"))
+  return data.tarballSha256 || {}
+}
+
+async function sha256OfFile(filePath) {
+  return await new Promise((resolve, reject) => {
+    const hash = crypto.createHash("sha256")
+    const stream = fs.createReadStream(filePath)
+    stream.on("data", chunk => hash.update(chunk))
+    stream.on("end", () => resolve(hash.digest("hex")))
+    stream.on("error", reject)
+  })
+}
+
+async function verifyTarball(tarballPath, version) {
+  const known = loadKnownChecksums()
+  const expected = known[version]
+  if (!expected) {
+    throw new Error(
+      `LuaRocks ${version} is not in this action's known-checksums.json — ` +
+      `the downloaded tarball cannot be verified. ` +
+      `Either pin luaRocksVersion to a known release ` +
+      `(${Object.keys(known).sort((a, b) => b.localeCompare(a, undefined, { numeric: true })).join(", ")}) ` +
+      `or open a PR to add the SHA256 of luarocks-${version}.tar.gz to known-checksums.json.`
+    )
+  }
+  const actual = await sha256OfFile(tarballPath)
+  if (actual !== expected) {
+    throw new Error(
+      `SHA256 mismatch for luarocks-${version}.tar.gz: ` +
+      `expected ${expected}, got ${actual}. ` +
+      `The download from luarocks.org does not match the checksum recorded in this action — ` +
+      `aborting to avoid running unverified code.`
+    )
+  }
+  core.info(`Verified luarocks-${version}.tar.gz SHA256 ${actual}`)
+}
 
 async function main() {
   const luaRocksVersion = core.getInput('luaRocksVersion', { required: true })
@@ -18,6 +64,7 @@ async function main() {
   const luaRocksInstallPath = path.join(process.cwd(), LUAROCKS_PREFIX)
 
   const sourceTar = await tc.downloadTool(`https://luarocks.org/releases/luarocks-${luaRocksVersion}.tar.gz`)
+  await verifyTarball(sourceTar, luaRocksVersion)
   await io.mkdirP(luaRocksExtractPath)
   await tc.extractTar(sourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
